@@ -1,31 +1,27 @@
 @echo off
-echo ========================================
-echo  Compiling Bug Tracker Application
-echo ========================================
+echo ================================================
+echo Bug Tracker - Compilation Script
+echo ================================================
 echo.
 
-cd src
+echo Compiling Java files...
+javac -cp "lib/*" -d bin src/main/*.java src/model/*.java src/database/*.java src/service/*.java src/ui/*.java
 
-echo Compiling model classes...
-javac com\bugtracker\model\*.java
+if %errorlevel% equ 0 (
+    echo.
+    echo ================================================
+    echo Compilation successful!
+    echo ================================================
+    echo.
+    echo To run the application, use:
+    echo java -cp "bin;lib/*" main.Main
+    echo.
+) else (
+    echo.
+    echo ================================================
+    echo Compilation failed! Please check the errors above.
+    echo ================================================
+    echo.
+)
 
-echo Compiling util classes...
-javac com\bugtracker\util\*.java
-
-echo Compiling service classes...
-javac com\bugtracker\service\*.java
-
-echo Compiling view classes...
-javac com\bugtracker\view\*.java
-
-echo Compiling main application...
-javac com\bugtracker\BugTrackerApp.java
-
-echo.
-echo ========================================
-echo  Compilation Complete!
-echo ========================================
-echo.
-echo To run the application, execute: run.bat
-echo.
 pause

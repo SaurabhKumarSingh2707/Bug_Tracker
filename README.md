@@ -1,364 +1,202 @@
-# 🐛 Advanced Bug Tracker - Pure Java Swing
+# Bug Tracker Application
 
-A comprehensive, professional bug tracking system built with **pure Java Swing** - no frameworks, no dependencies, just clean Java code!
+A professional Bug Tracking System built with Java Swing GUI framework and SQLite database.
 
-## ✨ Latest Updates (v2.0)
+## Features
 
-- 🎨 **Modern Color Scheme** - Professional UI with carefully selected colors
-- 🖱️ **Enhanced Buttons** - Hand cursor on hover, improved visual feedback
-- 🎯 **Better UX** - Opaque buttons with solid colors for all platforms
-- 📁 **Clean Structure** - Organized project with no unnecessary files
-- 🚀 **Optimized Performance** - Faster rendering and better responsiveness
+- **User Authentication**: Login and registration system with password hashing
+- **User-Based Bug Management**: Each user can create and manage bugs
+- **Bug Management**: Create, view, edit, and delete bugs
+- **Priority Levels**: Critical, High, Medium, Low
+- **Status Tracking**: New, In Progress, Resolved, Closed, Reopened
+- **Search & Filter**: Search bugs by keywords and filter by status/priority
+- **Statistics Dashboard**: Real-time statistics of bugs by status and priority
+- **SQLite Database**: Persistent storage for users and bugs
+- **User-Friendly GUI**: Clean and intuitive interface
 
-## 📋 Features
-
-### 🔐 User Management
-- **User Authentication** - Secure login and registration
-- **Multiple User Roles** - Admin, Manager, Developer, Tester, Viewer
-- **User Profiles** - Customizable personal information
-- **Password Management** - Change password securely
-
-### 🐛 Bug Tracking
-- **Create, Edit, Delete Bugs** - Full CRUD operations
-- **Bug Status Tracking** - New, Open, In Progress, Resolved, Closed, Reopened
-- **Priority Levels** - Critical, High, Medium, Low
-- **Severity Levels** - Blocker, Critical, Major, Minor, Trivial
-- **Bug Assignment** - Assign bugs to team members
-- **Comments System** - Add comments and updates to bugs
-- **Complete Bug History** - Track all changes and updates
-
-### 📊 Dashboard & Analytics
-- **Real-time Statistics** - Live bug counts and metrics
-- **Advanced Filtering** - Filter by status, priority, or assignment
-- **Search Functionality** - Quick search by ID, title, or description
-- **My Bugs View** - See bugs you reported
-- **Assigned to Me** - View bugs assigned to you
-- **Clean Table View** - Easy-to-read bug list
-
-### 💾 Data Persistence
-- **Automatic Saving** - All data saved automatically
-- **File-based Storage** - No database required
-- **Java Serialization** - Fast and reliable data storage
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- **Java JDK 8 or higher** installed on your system
-- **No additional dependencies required!** Pure Java only
-
-### Quick Start (Windows)
-
-1. **Compile the application:**
-   ```bash
-   compile.bat
-   ```
-
-2. **Run the application:**
-   ```bash
-   run.bat
-   ```
-
-### Quick Start (Linux/Mac)
-
-1. **Make scripts executable:**
-   ```bash
-   chmod +x compile.sh run.sh
-   ```
-
-2. **Compile the application:**
-   ```bash
-   ./compile.sh
-   ```
-
-3. **Run the application:**
-   ```bash
-   ./run.sh
-   ```
-
-### Manual Compilation
-
-```bash
-# Navigate to src directory
-cd src
-
-# Compile all Java files
-javac com/bugtracker/model/*.java
-javac com/bugtracker/util/*.java
-javac com/bugtracker/service/*.java
-javac com/bugtracker/view/*.java
-javac com/bugtracker/BugTrackerApp.java
-
-# Run the application
-java com.bugtracker.BugTrackerApp
-```
-
----
-
-## 🔑 Default Credentials
-
-The application comes with pre-configured demo accounts:
-
-| Username | Password | Role | Description |
-|----------|----------|------|-------------|
-| **admin** | admin123 | Administrator | Full system access |
-| **manager** | manager123 | Project Manager | Manage projects and assign bugs |
-| **developer** | dev123 | Developer | Fix bugs and update status |
-| **tester** | test123 | Tester | Report and verify bugs |
-
----
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 Bug_Tracker/
+├── lib/
+│   └── sqlite-jdbc-3.44.1.0.jar  # SQLite JDBC driver
 ├── src/
-│   └── com/
-│       └── bugtracker/
-│           ├── BugTrackerApp.java          # Main application entry point
-│           ├── model/                       # Data models
-│           │   ├── Bug.java                 # Bug entity
-│           │   ├── BugPriority.java         # Priority enum
-│           │   ├── BugSeverity.java         # Severity enum
-│           │   ├── BugStatus.java           # Status enum
-│           │   ├── Comment.java             # Comment entity
-│           │   ├── User.java                # User entity
-│           │   └── UserRole.java            # User role enum
-│           ├── service/                     # Business logic layer
-│           │   ├── AuthService.java         # Authentication service
-│           │   ├── BugService.java          # Bug management service
-│           │   └── UserService.java         # User management service
-│           ├── util/                        # Utility classes
-│           │   └── DataStore.java           # Data persistence
-│           └── view/                        # GUI components (Swing)
-│               ├── CreateBugDialog.java     # Create bug dialog
-│               ├── EditBugDialog.java       # Edit bug dialog
-│               ├── LoginFrame.java          # Login screen
-│               ├── MainFrame.java           # Main application window
-│               ├── ProfileDialog.java       # User profile dialog
-│               └── RegisterFrame.java       # Registration screen
-├── data/                                    # Auto-generated data storage
-│   ├── bugs.dat                             # Bug data file
-│   └── users.dat                            # User data file
-├── compile.bat                              # Windows compilation script
-├── run.bat                                  # Windows run script
-├── compile.sh                               # Linux/Mac compilation script
-├── run.sh                                   # Linux/Mac run script
-└── README.md                                # This file
+│   ├── main/
+│   │   └── Main.java              # Application entry point
+│   ├── model/
+│   │   ├── Bug.java               # Bug data model
+│   │   └── User.java              # User data model
+│   ├── database/
+│   │   ├── DatabaseManager.java   # Database connection and initialization
+│   │   ├── UserDAO.java           # User data access operations
+│   │   └── BugDAO.java            # Bug data access operations
+│   ├── service/
+│   │   ├── AuthService.java       # Authentication service
+│   │   └── BugService.java        # Bug business logic
+│   └── ui/
+│       ├── LoginFrame.java        # Login window
+│       ├── RegisterDialog.java    # Registration dialog
+│       ├── BugTrackerFrame.java   # Main application window
+│       ├── BugListPanel.java      # Bug list with search/filter
+│       ├── AddBugPanel.java       # Create new bugs
+│       ├── StatisticsPanel.java   # Statistics dashboard
+│       ├── BugDetailsDialog.java  # View bug details
+│       └── EditBugDialog.java     # Edit existing bugs
+├── bugtracker.db                   # SQLite database (created on first run)
+└── README.md
 ```
 
----
+## How to Run
 
-## 📖 Usage Guide
+### Prerequisites
+- Java Development Kit (JDK) 8 or higher
+- SQLite JDBC driver (already included in `lib/` folder)
 
-### 1. Creating a New Bug
+### Compilation
+```bash
+# Navigate to the project directory
+cd Bug_Tracker
 
-1. Login with your credentials
-2. Click the **"➕ New Bug"** button
-3. Fill in the required information:
-   - **Title** (required)
-   - **Description** (required)
-   - **Priority** (Critical, High, Medium, Low)
-   - **Severity** (Blocker, Critical, Major, Minor, Trivial)
-   - **Project Name** (optional)
-   - **Assign To** (optional - select a team member)
-   - **Steps to Reproduce** (optional)
-4. Click **"Create Bug"** to save
+# Compile all Java files with SQLite library
+javac -cp "lib/*" -d bin src/main/*.java src/model/*.java src/database/*.java src/service/*.java src/ui/*.java
+```
 
-### 2. Managing Bugs
+### Execution
+```bash
+# Run the application
+java -cp "bin;lib/*" main.Main
+```
 
-- **View Details**: Click on any bug in the table to see full details on the right panel
-- **Edit Bug**: Select a bug and click **"✏️ Edit Bug"** to modify it
-- **Add Comment**: Select a bug and click **"💬 Add Comment"** to add notes
-- **Delete Bug**: Select a bug and click **"🗑️ Delete Bug"** to remove it
-- **Change Status**: Edit the bug and update its status
+**Note for Windows PowerShell**: Use semicolon (`;`) as path separator
+**Note for Linux/Mac**: Use colon (`:`) as path separator: `java -cp "bin:lib/*" main.Main`
 
-### 3. Filtering & Searching
+## First Time Setup
 
-- **Search Bar**: Type in the search box and click **"🔍 Search"** to find bugs by:
-  - Bug ID
-  - Title
-  - Description
-- **My Bugs**: Click **"📋 My Bugs"** to see bugs you reported
-- **Assigned to Me**: Click **"✓ Assigned to Me"** to see your assigned bugs
-- **Refresh**: Click **"🔄 Refresh"** to reload all bugs
-
-### 4. Profile Management
-
-1. Click the **"Profile"** button in the top right corner
-2. Update your personal information:
+1. Run the application
+2. Click "Register" button on the login screen
+3. Fill in the registration form:
    - Full Name
-   - Email
-   - Department
-3. Change your password (optional):
-   - Enter old password
-   - Enter new password
-   - Confirm new password
-4. Click **"Save Profile"** to save changes
+   - Username (unique)
+   - Email (unique)
+   - Password (minimum 6 characters)
+4. Click "Register"
+5. Login with your new credentials
 
----
+## Usage Guide
 
-## 🎯 Features in Detail
+### Login Screen
+- **Login**: Enter username and password to access the application
+- **Register**: Create a new user account
 
-### User Roles & Permissions
+### Main Application
 
-| Role | Permissions |
-|------|------------|
-| **Administrator** | Full system access, user management |
-| **Manager** | Create/edit/delete bugs, assign bugs, manage projects |
-| **Developer** | Update bug status, add comments, view assignments |
-| **Tester** | Create bugs, add comments, verify fixes |
-| **Viewer** | Read-only access to bugs |
+#### 1. Bug List Tab
+- View all bugs in a table format
+- **Search**: Enter keywords to search in bug titles and descriptions
+- **Filter**: Filter bugs by status or priority
+- **View Details**: Select a bug and click "View Details" to see full information
+- **Edit**: Select a bug and click "Edit Bug" to modify it
+- **Delete**: Select a bug and click "Delete Bug" to remove it
+- **Refresh**: Update the bug list
 
-### Bug Workflow
+#### 2. Add New Bug Tab
+- **Title**: Enter a descriptive title for the bug
+- **Description**: Provide detailed information about the bug
+- **Priority**: Select the priority level (Low, Medium, High, Critical)
+- **Assigned To**: Enter the name of the person responsible for fixing the bug
+- Click "Submit Bug" to create the bug or "Clear Form" to reset
 
-```
-📌 NEW → 📂 OPEN → ⏳ IN_PROGRESS → ✅ RESOLVED → 🔒 CLOSED
-                        ↓
-                    🔄 REOPENED (if issues persist)
-```
+#### 3. Statistics Tab
+- View real-time statistics:
+  - Total number of bugs
+  - Bugs by status (New, In Progress, Resolved, Closed)
+  - Critical priority bugs count
+- Click "Refresh Statistics" to update the numbers
 
-### Priority Levels
+### Logout
+- Click the "Logout" button in the top-right corner
+- Confirms before logging out
+- Returns to the login screen
 
-- 🔴 **Critical** - System-breaking issues, immediate attention required
-- 🟠 **High** - Important features affected, high priority
-- 🟡 **Medium** - Moderate impact on functionality
-- 🔵 **Low** - Minor issues, cosmetic problems
+## Database Schema
 
-### Severity Levels
+### Users Table
+- `id`: Primary key (auto-increment)
+- `username`: Unique username
+- `email`: Unique email address
+- `password_hash`: SHA-256 hashed password
+- `full_name`: User's full name
+- `created_date`: Account creation timestamp
+- `last_login_date`: Last login timestamp
 
-- **Blocker** - System is unusable, blocks all work
-- **Critical** - Major functionality is broken
-- **Major** - Significant impact on functionality
-- **Minor** - Small impact on functionality
-- **Trivial** - Cosmetic issues, very low impact
+### Bugs Table
+- `id`: Primary key (auto-increment)
+- `title`: Bug title
+- `description`: Detailed bug description
+- `priority`: LOW, MEDIUM, HIGH, CRITICAL
+- `status`: NEW, IN_PROGRESS, RESOLVED, CLOSED, REOPENED
+- `assigned_to`: Person responsible for fixing
+- `created_by`: User ID who created the bug (foreign key)
+- `created_date`: Bug creation timestamp
+- `updated_date`: Last update timestamp
 
----
+## Security Features
 
-## 💾 Data Storage
+- **Password Hashing**: Passwords are hashed using SHA-256 before storage
+- **Unique Constraints**: Usernames and emails must be unique
+- **Session Management**: Only authenticated users can access the bug tracker
+- **Input Validation**: All user inputs are validated before processing
 
-All application data is stored locally in the `data/` directory:
-
-- **`users.dat`** - User accounts, profiles, and authentication data
-- **`bugs.dat`** - Bug reports, comments, and history
-
-The data files are automatically created on first run and updated whenever changes are made. No database setup required!
-
----
-
-## 🎨 Screenshots
-
-The application features a modern, clean interface with:
-- **Login Screen** - Simple and secure authentication
-- **Main Dashboard** - Complete bug overview with statistics
-- **Bug Details Panel** - Comprehensive bug information display
-- **Create/Edit Dialogs** - Easy-to-use forms
-- **Profile Management** - User settings and preferences
-
----
-
-## 🛠️ Technical Details
+## Technical Details
 
 ### Architecture
-- **MVC Pattern** - Clean separation of concerns
-- **Service Layer** - Business logic abstraction
-- **Data Layer** - File-based persistence
+- **MVC Pattern**: Separation of Model, View, and Controller logic
+- **DAO Pattern**: Data Access Objects for database operations
+- **Service Layer**: Business logic separated from UI and data access
+- **SQLite Database**: Lightweight, file-based database for persistence
 
-### Technologies
-- **Java SE** - Core Java without frameworks
-- **Swing** - Native Java GUI toolkit
-- **Java Serialization** - Object persistence
+### Technologies Used
+- **Java Swing**: GUI framework
+- **SQLite**: Embedded database
+- **JDBC**: Database connectivity
+- **SHA-256**: Password hashing algorithm
 
-### Design Patterns
-- **Singleton** - DataStore management
-- **Observer** - GUI event handling
-- **Factory** - Object creation
+## Database File
 
----
+The SQLite database file (`bugtracker.db`) is automatically created in the project root directory on first run. This file contains all users and bugs data.
 
-## 🤝 Contributing
+## Troubleshooting
 
-Contributions are welcome! Here's how you can help:
+### Cannot find SQLite driver
+If you get an error about missing SQLite driver, ensure:
+1. The `lib/sqlite-jdbc-3.44.1.0.jar` file exists
+2. You're including it in the classpath with `-cp "lib/*"`
 
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
-3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** to the branch (`git push origin feature/AmazingFeature`)
-5. **Open** a Pull Request
+### Database locked error
+If the database is locked:
+1. Close all instances of the application
+2. Delete `bugtracker.db` file (WARNING: This will delete all data)
+3. Restart the application
 
----
+## Future Enhancements
 
-## 📝 Future Enhancements
+Possible improvements for future versions:
+- Email notifications for bug assignments
+- Attachment support for screenshots
+- Comments/discussion on bugs
+- Bug history/audit trail
+- Export reports to PDF/Excel
+- User roles and permissions (admin, developer, tester)
+- Dashboard with charts and graphs
+- Multi-language support
+- Dark mode theme
+- Email verification for registration
+- Password reset functionality
 
-Potential features for future versions:
-- [ ] Email notifications
-- [ ] File attachments for bugs
-- [ ] Export reports to PDF/Excel
-- [ ] Bug analytics and charts
-- [ ] Dark mode theme
-- [ ] Multi-language support
-- [ ] API integration
-- [ ] Database support (MySQL, PostgreSQL)
+## Author
 
----
+Created as a professional Java Swing demonstration project with SQLite integration.
 
-## 📄 License
+## License
 
-This project is open source and available for educational and commercial purposes.
-
----
-
-## 💬 Support
-
-For questions, issues, or suggestions:
-- Create an issue in the GitHub repository
-- Contact the development team
-- Check the documentation
-
----
-
-## 👨‍💻 Developer Notes
-
-### Code Quality
-- Clean, readable code with comments
-- Object-oriented design principles
-- Error handling and validation
-- User-friendly error messages
-
-### Testing
-- Test with multiple user roles
-- Verify data persistence
-- Check all CRUD operations
-- Test edge cases
-
----
-
-## 🎉 Acknowledgments
-
-Built with ❤️ using **Pure Java & Swing**
-
-**No frameworks. No dependencies. Just Java!**
-
----
-
-## 📚 Learning Resources
-
-This project demonstrates:
-- Java GUI development with Swing
-- Object-oriented programming principles
-- File I/O and serialization
-- Authentication and authorization
-- CRUD operations
-- MVC architecture
-
-Perfect for:
-- Java learning projects
-- Understanding GUI development
-- Portfolio demonstrations
-- Academic projects
-- Small team bug tracking
-
----
-
-**Happy Bug Tracking! 🐛✨**
+This project is open-source and available for educational purposes.
