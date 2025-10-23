@@ -20,7 +20,7 @@ public class BugDAO {
         String sql = "INSERT INTO bugs (title, description, priority, status, assigned_to, created_by, created_date, updated_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, bug.getTitle());
             pstmt.setString(2, bug.getDescription());
@@ -33,9 +33,13 @@ public class BugDAO {
             
             pstmt.executeUpdate();
             
-            ResultSet rs = pstmt.getGeneratedKeys();
-            if (rs.next()) {
-                return getBugById(rs.getInt(1));
+            // Get the last inserted ID using SQLite's last_insert_rowid()
+            String getLastIdSql = "SELECT last_insert_rowid()";
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(getLastIdSql)) {
+                if (rs.next()) {
+                    return getBugById(rs.getInt(1));
+                }
             }
             
         } catch (SQLException e) {

@@ -1,7 +1,9 @@
 package ui;
 
 import model.Bug;
+import model.User;
 import service.BugService;
+import service.AuthService;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -222,7 +224,8 @@ public class BugListPanel extends JPanel {
         Bug bug = bugService.getBugById(bugId);
         
         if (bug != null) {
-            BugDetailsDialog dialog = new BugDetailsDialog(parentFrame, bug);
+            User currentUser = AuthService.getCurrentUser();
+            BugDetailsDialog dialog = new BugDetailsDialog(parentFrame, bug, currentUser, this::refreshBugList);
             dialog.setVisible(true);
         }
     }

@@ -1,6 +1,7 @@
 package ui;
 
 import model.Bug;
+import model.User;
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,11 +10,20 @@ import java.awt.*;
  */
 public class BugDetailsDialog extends JDialog {
     private Bug bug;
+    private User currentUser;
+    private Runnable onBugUpdatedCallback;
     
-    public BugDetailsDialog(JFrame parent, Bug bug) {
+    public BugDetailsDialog(JFrame parent, Bug bug, User currentUser, Runnable onBugUpdatedCallback) {
         super(parent, "Bug Details - Bug #" + bug.getId(), true);
         this.bug = bug;
+        this.currentUser = currentUser;
+        this.onBugUpdatedCallback = onBugUpdatedCallback;
         initializeUI();
+    }
+    
+    // Backward compatibility constructor
+    public BugDetailsDialog(JFrame parent, Bug bug) {
+        this(parent, bug, null, null);
     }
     
     private void initializeUI() {
@@ -125,12 +135,54 @@ public class BugDetailsDialog extends JDialog {
         
         add(mainPanel, BorderLayout.CENTER);
         
+        // Button panel
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        
+        // Fix Bug button (only show if user is logged in and bug is not closed)
+        if (currentUser != null && bug.getStatus() != Bug.Status.CLOSED) {
+            JButton fixButton = new JButton("🔧 Fix Bug");
+            fixButton.setFont(new Font("Segoe UI", Font.BOLD, 13));
+            fixButton.setBackground(new Color(34, 197, 94));
+            fixButton.setForeground(Color.WHITE);
+            fixButton.setFocusPainted(false);
+            fixButton.setBorderPainted(false);
+            fixButton.setPreferredSize(new Dimension(120, 35));
+            fixButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            fixButton.addActionListener(e -> handleFixBug());
+            
+            // Disable if already resolved
+            if (bug.getStatus() == Bug.Status.RESOLVED) {
+                fixButton.setText("✓ Already Fixed");
+                fixButton.setEnabled(false);
+                fixButton.setBackground(new Color(150, 150, 150));
+            }
+            
+            buttonPanel.add(fixButton);
+        }
+        
         // Close button
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton closeButton = new JButton("Close");
+        closeButton.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        closeButton.setPreferredSize(new Dimension(100, 35));
         closeButton.addActionListener(e -> dispose());
         buttonPanel.add(closeButton);
+        
         add(buttonPanel, BorderLayout.SOUTH);
+    }
+    
+    private void handleFixBug() {
+        FixBugDialog fixDialog = new FixBugDialog((Frame) getParent(), bug, currentUser);
+        fixDialog.setVisible(true);
+        
+        if (fixDialog.wasFixed()) {
+            // Refresh the bug details
+            dispose();
+            
+            // Call the callback to refresh the parent view
+            if (onBugUpdatedCallback != null) {
+                onBugUpdatedCallback.run();
+            }
+        }
     }
     
     private JLabel createBoldLabel(String text) {
